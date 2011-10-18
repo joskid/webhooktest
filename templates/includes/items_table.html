@@ -1,0 +1,15 @@
+<table class="tablesorter" >
+  <thead>
+    <tr>
+      <th><a>Key</a></th>
+      <th><a>Value</a></th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for key, val in items %}
+    <tr>
+      <td>{{ key }}</td><td>{{ val }}</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>

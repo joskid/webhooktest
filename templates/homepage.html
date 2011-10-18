@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% load uni_form_tags %}
+{% block title %}Create Webhook test URL{% endblock %}
+
+{% block content %}
+  <h2>Create a webhook test URL</h2>
+  <p>Create an unique WebHookTest URL, and register it as a webhook triggerer at your payment gateway account. 
+    All POST, GET(with request parameters only), DELETE and UPDATE http requests at the given URL will be captured and logged, so then you can then <strong>path-through</strong> request data to your <strong>localhost</strong>.</p>
+  <p>Webhook testing threads are attached to your browser session, so anybody except you can see this data, but you should query the URL only with the same browser (your session data get expired in two weeks).</p>
+  <form method="post" class="uniForm">
+    {{ form|as_uni_form }}
+    <hr class="space" />
+    <input type="submit" value="Create a Webhook test URL">    
+  </form>
+{% endblock %}
+
+{% block sidebar %}
+  <h3>Webhook Threads</h3>
+  {% for t in threads %}
+  <p>{% if t.id == thread.id %}
+    <strong>({{ t.posts.count }}) {{ t }}</strong>
+    {% else %}
+    <a rel="nofollow" href="{{ t.get_absolute_url }}"><strong>({{ t.posts.count }}) {{ t }}</strong></a>
+    {% endif %} 
+    <i>{{ t.created|timesince }} ago. </i><a href="{% url delete-thread t.uuid %}">delete</a></p>
+  {% empty %}
+  <p>All your created threads will listed here.</p>
+  {% endfor %}
+{% endblock %}
+

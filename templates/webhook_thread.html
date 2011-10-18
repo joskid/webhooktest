@@ -1,0 +1,100 @@
+{% extends "homepage.html" %}
+{% load uni_form_tags %}
+
+{% block extra_head %}
+<meta name="robots" content="noindex,nofollow" />
+
+<link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.4/themes/base/jquery-ui.css" type="text/css"/>
+<link rel="stylesheet" href="{{ MEDIA_URL }}tablesorter/css/style.css" type="text/css"/>
+
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.4/jquery-ui.min.js"></script>
+<script type="text/javascript" src="{{ MEDIA_URL }}tablesorter/js/jquery.tablesorter.min.js"></script>
+
+<script>
+  $(function() {
+      $(".post").tabs({
+          select: function(event, ui) {
+              if(ui.tab.id == 'webhooktest') {
+                  $.ajax({
+                      url: $('#id_target_url').val(),
+                      type: 'POST',
+                      data:  $.trim($('#' + ui.panel.id + '_raw_post').text()),
+                      success: function(data, textStatus, jqXHR) {
+                          $('.status', ui.panel).text(jqXHR.status);
+                          $('.data', ui.panel).html(data);
+                      },
+                      error: function(jqXHR, desc, err) {
+                          $('.status', ui.panel).text(jqXHR.statusText).addClass('error');
+                          $('.data', ui.panel).html($(jqXHR.responseText));
+                      }
+                  });
+                  return true;
+              }
+          }
+      });
+      $(".tablesorter").tablesorter({widgets: ['zebra']});
+  });
+</script>
+{% endblock %}
+
+{% block title %}({{ posts_count }}) {{ thread }} - WebHookTest requests{% endblock %}
+
+{% block content %}
+  <h2>Update Webhook Thread config</h2>
+  <form method="post" action="{% url update-thread thread.uuid %}" class="uniForm">
+    {{ form|as_uni_form }}
+    <hr class="space" />
+    <input type="submit" value="Update parameters">
+  </form>
+  <hr class="space" />
+  <hr/>
+  <hr class="space" />
+
+  <h2>({{ posts_count }}) {{ thread }} Webhook requests</h2>
+  {% for post in thread.posts.all %}
+  <div id="post-{{ post.pk }}" class="post">
+    {% with post.data as data %}
+    <p>
+      <a href="#post-{{ post.number }}" title="Unique Post link and ID">#{{ post.number }}</a>
+      {{ data.request_method }} from {{ post.get_remote_server }}, created on <i>{{ post.created|date:"DATETIME_FORMAT" }}</i>
+      <a href="{% url delete-post thread.uuid post.number %}" title="Delete Post">delete</a>
+    </p>
+    <ul>
+      <li><a href="#{{ post.pk }}_raw_post">Raw POST</a></li>
+      <li><a href="#{{ post.pk }}_parsed_post">Parsed POST</a></li>
+      <li><a href="#{{ post.pk }}_http_headers">Http Headers</a></li>
+      {% if data.parsed_get %}
+      <li><a href="#{{ post.pk }}_parsed_get">Parsed GET</a></li>
+      {% endif %}
+      <li><a href="#{{ post.pk }}" id="webhooktest">Do Path-through</a></li>
+    </ul>
+    <div id="{{ post.pk }}_raw_post">
+      {{ data.raw_post }}
+    </div>
+    <div id="{{ post.pk }}_parsed_post">
+      {% with data.parsed_post.iteritems as items%}
+      {% include "includes/items_table.html" %}
+      {% endwith %}
+    </div>
+    <div id="{{ post.pk }}_http_headers">
+      {% with data.http_headers.iteritems as items%}
+      {% include "includes/items_table.html" %}
+      {% endwith %}
+    </div>
+    <div id="{{ post.pk }}">
+      <p class="status"></p>
+      <p class="data"></p>
+    </div>
+    {% if data.parsed_get %}
+    <div id="{{ post.pk }}_parsed_get">
+      {% with data.parsed_get.iteritems as items%}
+      {% include "includes/items_table.html" %}
+      {% endwith %}
+    </div>
+    {% endif %}
+    {% endwith %}    
+  </div>
+  {% empty %}
+  <p>No data posted yet.</p>
+  {% endfor %}
+{% endblock %}
