@@ -3,11 +3,11 @@ import sys
 
 PROJECT_ROOT = os.path.normpath(os.path.dirname(__file__))
 
-DEBUG = True
+DEBUG = False
 TEMPLATE_DEBUG = DEBUG
 
 ADMINS = (
-     ('Alex ', 'alex.schemelev@gmail.com'),
+     ('Admin', 'admin@fakemail.com'),
 )
 
 MANAGERS = ADMINS
@@ -98,16 +98,16 @@ INSTALLED_APPS = (
     'postlog',
 )
 
-CACHES = {
-    'default': {
-        'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
-        'LOCATION': '127.0.0.1:11211',
-    }
-}
 
 AUTHENTICATION_BACKENDS = (
     'django.contrib.auth.backends.ModelBackend',
 )
 
 SESSION_THREAD_KEY = 'thread-uuid'
-THREAD_POST_LIMIT = 10
+THREAD_POST_LIMIT = 100
+try:
+    from settings_local import *
+except ImportError, exc:
+    if str(exc) != 'No module named settings_local':
+        raise
+                    
