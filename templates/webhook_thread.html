@@ -4,9 +4,8 @@
 {% block extra_head %}
 <meta name="robots" content="noindex,nofollow" />
 
-<link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.4/themes/base/jquery-ui.css" type="text/css"/>
 <link rel="stylesheet" href="{{ MEDIA_URL }}tablesorter/css/style.css" type="text/css"/>
-
+<link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.4/themes/base/jquery-ui.css" type="text/css"/>
 <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.4/jquery-ui.min.js"></script>
 <script type="text/javascript" src="{{ MEDIA_URL }}tablesorter/js/jquery.tablesorter.min.js"></script>
 
@@ -66,7 +65,8 @@
       {% if data.parsed_get %}
       <li><a href="#{{ post.pk }}_parsed_get">Parsed GET</a></li>
       {% endif %}
-      <li><a href="#{{ post.pk }}" id="webhooktest">Do Path-through</a></li>
+      <li><a href="#{{ post.pk }}" id="webhooktest">Pass-through</a></li>
+      <li><a href="#{{ post.pk }}_curl" >curl</a></li>
     </ul>
     <div id="{{ post.pk }}_raw_post">
       {{ data.raw_post }}
@@ -82,18 +82,23 @@
       {% endwith %}
     </div>
     <div id="{{ post.pk }}">
-      <p class="status"></p>
+      <p class="status ceneter"><img src="{{ MEDIA_URL }}/images/ajax-loader.gif" alt="Wait" /></p>
       <p class="data"></p>
+    </div>
+    <div id="{{ post.pk }}_curl">
+      <p>curl -d '{{ data.raw_post }}' {{ thread.target_url }}</p>
     </div>
     {% if data.parsed_get %}
     <div id="{{ post.pk }}_parsed_get">
-      {% with data.parsed_get.iteritems as items%}
+      {% with data.parsed_get.iteritems as items %}
       {% include "includes/items_table.html" %}
       {% endwith %}
     </div>
     {% endif %}
     {% endwith %}    
   </div>
+  <hr class="space" />
+  <hr/>
   {% empty %}
   <p>No data posted yet.</p>
   {% endfor %}

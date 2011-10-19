@@ -5,8 +5,8 @@
 {% block content %}
   <h2>Create a webhook test URL</h2>
   <p>Create an unique WebHookTest URL, and register it as a webhook triggerer at your payment gateway account. 
-    All POST, GET(with request parameters only), DELETE and UPDATE http requests at the given URL will be captured and logged, so then you can then <strong>path-through</strong> request data to your <strong>localhost</strong>.</p>
-  <p>Webhook testing threads are attached to your browser session, so anybody except you can see this data, but you should query the URL only with the same browser (your session data get expired in two weeks).</p>
+    All POST http requests at the given URL will be captured and logged, so then you can pass-through the data to your local development server.</p>
+  <p>Webhook testing threads are attached to your browser session, so nobody except you can see this data, but you should query the URL only with the same browser. Note: your session get expired in two weeks.</p>
   <form method="post" class="uniForm">
     {{ form|as_uni_form }}
     <hr class="space" />
