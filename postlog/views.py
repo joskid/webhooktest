@@ -42,6 +42,7 @@ def webhook_thread(request, thread_id):
                                 post=post)
         return HttpResponse('WebHook data has been successfully added.')
     posts_count = thread.posts.count()
+    thread_url = request.build_absolute_uri(thread.get_absolute_url())
     return locals()
 
 @session_key_required

@@ -17,8 +17,8 @@ class Thread(TimeStampedModel):
                             help_text="URL-friendly thread UD.")
     client_ip = models.IPAddressField(null=True, blank=True, editable=False,
                                       help_text="IP of a user who created thread.")
-    alias = models.CharField("Thread Alias", max_length=60, null=True, blank=True, 
-                             help_text="Human-friendly name of your thread, for instance, 'Chargify WebHook'.")
+    alias = models.CharField("Webhook Alias", max_length=60, null=True, blank=True, 
+                             help_text="Human-friendly name of your Webhook, for instance, 'Chargify WebHook'.")
     target_url = models.URLField("Target URL", null=True, blank=True, verify_exists=False, default="http://127.0.0.1:8000/",
                                  help_text="Your development server URL, i.e. 'http://127.0.0.1:8000/paypal-ipn/'.")
     

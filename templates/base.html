@@ -1,8 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-    <meta name="description" content="WebhookTest - debug your payment gateway integration locally.">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="description" content="WebhookTest allows to debug webhooks against your development environment. It captures post http requests made to the Webhook Test URL and pass-through this data to your local-host." />
+    <meta name="copyright" content="Alex Schemelev" />
     <link rel="stylesheet" href="{{ MEDIA_URL }}css/screen.css" type="text/css"/>
     <link rel="stylesheet" href="{{ MEDIA_URL }}css/uni_form/uni-form.css" type="text/css" />
     <link rel="stylesheet" href="{{ MEDIA_URL }}css/uni_form/default.uni-form.css" type="text/css" />
@@ -16,27 +17,28 @@
   <body>
     <div class="container">
       <div id="header">
-	<h1>(<a rel="up" href="/">webhook-test</a>) <i class="quiet" style="font-size:.4em">debug your payment gateway integration locally.</i></h1>
+	<h1>(<a rel="up" href="/" style="text-decoration:none;">webhook-test</a>) <i class="quiet" style="font-size:.4em">easy way to debug webhooks</i></h1>
       </div>
       <hr/>
-      <div id="content">
-	<div class="span-15 prepend-1 colborder">
+      <div class="span-15 prepend-1 colborder">
 	  {% block content %}
 	  {% endblock %}
-	</div>
       </div>
-      <div id="sidebar">
-	<div class="span-7 last">
+      <div class="span-7 last">
 	{% block sidebar %}
 	{% endblock %}
-	</div>
       </div>
+      <hr/>
+      <p class="quiet">
+	This should be helpful for Web Developers who're testing a payment system or a gateway API intergration, such as: <a rel="external" target="_blank" href="http://docs.chargify.com/webhooks">Chargify</a>, <a rel="external" target="_blank" href="https://www.paypal.com/ipn">PayPal</a>, <a rel="external" target="_blank" href="http://developer.authorize.net/">Authorize.NET</a>, etc.<br/>
+	©2011. Inspired by <a rel="external" target="_blank" href="http://www.postbin.org/">PostBin</a> when Google app engine was down :-)</p>
+      <a href="http://www.djangoproject.com/"><img src="http://media.djangoproject.com/img/badges/djangomade124x25_grey.gif" border="0" alt="Made with Django." title="Made with Django." /></a>
     </div>
     <!-- Initialize uni-form -->
     <script type="text/javascript">
       $(function(){ $('form.uniForm').uniform(); });
     </script>
-    <a href="https://github.com/aschem/webhooktest"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://a248.e.akamai.net/assets.github.com/img/71eeaab9d563c2b3c590319b398dd35683265e85/687474703a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f677261795f3664366436642e706e67" alt="Fork me on GitHub"></a>
+    <a href="https://github.com/aschem/webhooktest"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://a248.e.akamai.net/assets.github.com/img/30f550e0d38ceb6ef5b81500c64d970b7fb0f028/687474703a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f6f72616e67655f6666373630302e706e67" alt="Fork me on GitHub"></a>
     <script type="text/javascript">
 
   var _gaq = _gaq || [];
