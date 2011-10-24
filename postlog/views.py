@@ -5,16 +5,12 @@ from django.conf import settings
 from annoying.decorators import render_to
 from postlog.models import Thread, Post
 from postlog.forms import ThreadForm
-from postlog.decorators import session_key_required, set_headers
+from postlog.decorators import session_key_required, cross_domain_ajax
 from postlog import signals
 
 import uuid
 from datetime import datetime
 
-ACC_HEADERS = {'Access-Control-Allow-Origin': '*', 
-               'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
-               'Access-Control-Max-Age': 1000,
-               'Access-Control-Allow-Headers': '*'}
 
 @render_to('homepage.html')
 def homepage(request):
@@ -27,7 +23,7 @@ def homepage(request):
         return redirect(webhook_thread, thread.uuid)
     return locals()
 
-@set_headers(ACC_HEADERS)
+@cross_domain_ajax
 @session_key_required
 @render_to('webhook_thread.html')
 def webhook_thread(request, thread_id):
@@ -75,7 +71,7 @@ def update_thread(request, thread_id):
             form.save(request)
     return redirect(webhook_thread, thread.uuid)
 
-@set_headers(ACC_HEADERS)
+@cross_domain_ajax
 def test_post(request):
     """ Just for testing. """
     response = HttpResponse('Your WebHook works fine! :)')

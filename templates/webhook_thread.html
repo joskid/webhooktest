@@ -17,6 +17,7 @@
                   $.ajax({
                       url: $('#id_target_url').val(),
                       type: 'POST',
+                      contentType: $.trim($('#' + ui.panel.id + '_http_headers').find('#content_type').text()),
                       data:  $.trim($('#' + ui.panel.id + '_raw_post').text()),
                       success: function(data, textStatus, jqXHR) {
                           $('.status', ui.panel).text(jqXHR.status);
@@ -41,7 +42,7 @@
 {% block content %}
   <h2>Update Webhook Thread config</h2>
   <form method="post" action="{% url update-thread thread.uuid %}" class="uniForm">
-    {{ form|as_uni_form }}
+    {{ form|as_uni_form }}{% csrf_token %}
     <hr class="space" />
     <input type="submit" value="Update parameters">
   </form>
@@ -71,7 +72,7 @@
       {{ data.raw_post }}
     </div>
     <div id="{{ post.pk }}_parsed_post">
-      {% with data.parsed_post.iteritems as items%}
+      {% with post.get_parsed_data.iteritems as items %}
       {% include "includes/items_table.html" %}
       {% endwith %}
     </div>

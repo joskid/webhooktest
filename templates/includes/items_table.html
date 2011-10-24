@@ -8,7 +8,7 @@
   <tbody>
     {% for key, val in items %}
     <tr>
-      <td>{{ key }}</td><td>{{ val }}</td>
+      <td>{{ key }}</td><td {% if key == 'Content-Type' %}id="content_type"{% endif %}>{{ val }}</td>
     </tr>
     {% endfor %}
   </tbody>
