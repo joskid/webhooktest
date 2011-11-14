@@ -40,89 +40,89 @@
 {% block title %}({{ posts_count }}) {{ thread }} - WebHookTest requests{% endblock %}
 
 {% block content %}
-  <h2>Update Webhook Thread config</h2>
-  <form method="post" action="{% url update-thread thread.uuid %}" class="uniForm">
+<h2>Update Webhook Thread config</h2>
+<form method="post" action="{% url update-thread thread.uuid %}" class="uniForm">
     {{ form|as_uni_form }}{% csrf_token %}
     <hr class="space" />
     <input type="submit" value="Update parameters">
-  </form>
-  <hr class="space" />
-  <hr/>
-  <hr class="space" />
-  <h2>({{ posts_count }}) {{ thread }} Webhook requests</h2>
-  {% for post in thread.posts.all %}
-  <div id="post-{{ post.pk }}" class="post">
+</form>
+<hr class="space" />
+<hr/>
+<hr class="space" />
+<h2>({{ posts_count }}) {{ thread }} Webhook requests</h2>
+{% for post in thread.posts.all %}
+<div id="post-{{ post.pk }}" class="post">
     {% with post.data as data %}
     <p>
-      <a href="#post-{{ post.number }}" title="Unique Post link and ID">#{{ post.number }}</a>
-      {{ data.request_method }} from {{ post.get_remote_server }}, created on <i>{{ post.created|date:"DATETIME_FORMAT" }}</i>
-      <a href="{% url delete-post thread.uuid post.number %}" title="Delete Post">delete</a>
+	<a href="#post-{{ post.number }}" title="Unique Post link and ID">#{{ post.number }}</a>
+	{{ data.request_method }} from {{ post.get_remote_server }}, created on <i>{{ post.created|date:"DATETIME_FORMAT" }}</i>
+	<a href="{% url delete-post thread.uuid post.number %}" title="Delete Post">delete</a>
     </p>
     <ul>
-      <li><a href="#{{ post.pk }}_raw_post">Raw POST</a></li>
-      <li><a href="#{{ post.pk }}_parsed_post">Parsed POST</a></li>
-      <li><a href="#{{ post.pk }}_http_headers">Http Headers</a></li>
-      {% if data.parsed_get %}
-      <li><a href="#{{ post.pk }}_parsed_get">Parsed GET</a></li>
-      {% endif %}
-      <li><a href="#{{ post.pk }}" id="webhooktest">Pass-through</a></li>
-      <li><a href="#{{ post.pk }}_curl" >curl</a></li>
+	<li><a href="#{{ post.pk }}_raw_post">Raw POST</a></li>
+	<li><a href="#{{ post.pk }}_parsed_post">Parsed POST</a></li>
+	<li><a href="#{{ post.pk }}_http_headers">Http Headers</a></li>
+	{% if data.parsed_get %}
+	<li><a href="#{{ post.pk }}_parsed_get">Parsed GET</a></li>
+	{% endif %}
+	<li><a href="#{{ post.pk }}" id="webhooktest">Pass-through</a></li>
+	<li><a href="#{{ post.pk }}_curl" >curl</a></li>
     </ul>
     <div id="{{ post.pk }}_raw_post">
-      {{ data.raw_post }}
+	{{ data.raw_post }}
     </div>
     <div id="{{ post.pk }}_parsed_post">
-      {% with post.get_parsed_data.iteritems as items %}
-      {% include "includes/items_table.html" %}
-      {% endwith %}
+	{% with post.get_parsed_data.iteritems as items %}
+	{% include "includes/items_table.html" %}
+	{% endwith %}
     </div>
     <div id="{{ post.pk }}_http_headers">
-      {% with data.http_headers.iteritems as items%}
-      {% include "includes/items_table.html" %}
-      {% endwith %}
+	{% with data.http_headers.iteritems as items%}
+	{% include "includes/items_table.html" %}
+	{% endwith %}
     </div>
     <div id="{{ post.pk }}">
-      <p class="status ceneter"><img src="{{ MEDIA_URL }}/images/ajax-loader.gif" alt="Wait" /></p>
-      <div class="data"></div>
+	<p class="status ceneter"><img src="{{ MEDIA_URL }}/images/ajax-loader.gif" alt="Wait" /></p>
+	<div class="data"></div>
     </div>
     <div id="{{ post.pk }}_curl">
-      <p>curl -d '{{ data.raw_post }}' {{ thread.target_url }}</p>
+	<p>curl -d '{{ data.raw_post }}' {{ thread.target_url }}</p>
     </div>
     {% if data.parsed_get %}
     <div id="{{ post.pk }}_parsed_get">
-      {% with data.parsed_get.iteritems as items %}
-      {% include "includes/items_table.html" %}
-      {% endwith %}
+	{% with data.parsed_get.iteritems as items %}
+	{% include "includes/items_table.html" %}
+	{% endwith %}
     </div>
     {% endif %}
     {% endwith %}    
-  </div>
-  <hr class="space" />
-  <hr/>
-  {% empty %}
-  <p>No data posted yet. Create a test POST by the following command:<br/>
+</div>
+<hr class="space" />
+<hr/>
+{% empty %}
+<p>No data posted yet. Create a test POST by the following command:<br/>
     <code>$ curl -d 'webhooktest_id={{ thread.uuid }}' {{ thread_url }}</code>
-  </p>
-  {% endfor %}
+</p>
+{% endfor %}
 {% endblock %}
 
 {% block sidebar %}
-  {{ block.super }}
-  <h3>How to use</h3>
-    <ol>
+{{ block.super }}
+<h3>How to use</h3>
+<ol>
     <li>Copy the following url:<br/>
-      <code>{{ thread_url }}</code>
+	<code>{{ thread_url }}</code>
     </li>
     <li>Register it as a Webhook at the system you're integrating with.</li>
     <li>Trigger a webhook event.</li>
     <li>Refresh the page (sorry, we don't do this with Ajax).</li>
     <li>Inspect captured data and pass-through if necessary (don't forget to enter correct Target URL - the URL of your local webhook handler).</li>
-  </ol>
-  <p class="quiet">If you intend to use the <a href="http://jimbojw.com/wiki/index.php?title=Introduction_to_Cross-Domain_Ajax">cross-domain</a> Ajax call to pass-through the data to your localhost, your webhook handler response should include the following http headers:<br/>
-      <code>
+</ol>
+<p class="quiet">If you intend to use the <a href="http://jimbojw.com/wiki/index.php?title=Introduction_to_Cross-Domain_Ajax">cross-domain</a> Ajax call to pass-through the data to your localhost, your webhook handler response should include the following http headers:<br/>
+    <code>
 	Access-Control-Allow-Origin: *<br/> 
         Access-Control-Allow-Methods: GET, POST, OPTIONS<br/> 
         Access-Control-Allow-Headers: *<br/> 
-      </code>
-    </p>
+    </code>
+</p>
 {% endblock %}

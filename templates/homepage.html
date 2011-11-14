@@ -3,31 +3,34 @@
 {% block title %}Create Webhook test URL{% endblock %}
 
 {% block content %}
-  <h2>Create Webhook test URL</h2>
-  <p>
-Testing <a rel="external" target="_blank" href="http://www.webhooks.org/">Webhooks</a> could be a bit tricky because you should provide an external URL visible by web service you're integrating with. Creating a Webhook test URL you're obtaining such external URL - own data feed, where all captured POST http requests will be listed in reversed chronological order. You can check <strong>post data</strong>, <strong>http headers</strong>, and finally, <strong>pass-though</strong> the raw post data to your local server by Ajax cross-domain call. The data could be posted by <strong>curl</strong> from the command line as well.
-  </p>
-  <form method="post" class="uniForm">
+<h2>Create Webhook test URL</h2>
+<p>
+    Testing <a rel="external" target="_blank" href="http://www.webhooks.org/">Webhooks</a> could be a bit tricky because you should provide an external URL visible by web service you're integrating with. Creating a Webhook test URL you're obtaining such external URL - own data feed, where all captured POST http requests will be listed in reversed chronological order. You can check <strong>post data</strong>, <strong>http headers</strong>, and finally, <strong>pass-though</strong> the raw post data to your local server by Ajax cross-domain call. The data could be posted by <strong>curl</strong> from the command line as well.
+</p>
+<form method="post" class="uniForm">
     {{ form|as_uni_form }}
     <hr class="space" />
     <input type="submit" value="Create a Webhook test URL"/>
-  </form>
-  <hr class="space" />
+</form>
+<hr class="space" />
 <p><strong>The data is secure.</strong> Each webhook testing feed is attached to your browser session, and nobody except you can access it - Http 404(Not Found) error is raised if anybody goes to your testing URL. But you should query the URL with the same browser (browser session get expired in two weeks).</p>
 
 {% endblock %}
 
 {% block sidebar %}
-  <h3>Webhook Data Feeds</h3>
-  {% for t in threads %}
-  <p>{% if t.id == thread.id %}
+<h3>Webhook Data Feeds</h3>
+{% for t in threads %}
+<p>{% if t.id == thread.id %}
     <strong>({{ t.posts.count }}) {{ t }}</strong>
     {% else %}
-    <a rel="nofollow" href="{{ t.get_absolute_url }}"><strong>({{ t.posts.count }}) {{ t }}</strong></a>
+    <a rel="nofollow" href="{{ t.get_absolute_url }}">
+	<strong>({{ t.posts.count }}) {{ t }}</strong>
+    </a>
     {% endif %} 
-    , <i>{{ t.created|timesince }} ago. </i><a href="{% url delete-thread t.uuid %}">delete</a></p>
-  {% empty %}
-  <p>Don't need to bookmark Webhook testing URLs, all of them will be listed here.</p>
-  {% endfor %}
+    , <i>{{ t.created|timesince }} ago. </i><a href="{% url delete-thread t.uuid %}">delete</a>
+</p>
+{% empty %}
+    <p>Don't need to bookmark Webhook testing URLs, all of them will be listed here</p>
+{% endfor %}
 {% endblock %}
 
