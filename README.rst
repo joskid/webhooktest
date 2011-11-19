@@ -15,7 +15,7 @@ Installation
 ============
 ::
 
-	git clone https://aschem@github.com/aschem/webhooktest.git
+	git clone https://github.com/aschem/webhooktest.git
 	cd webhooktest
 	pip install -r requirements.txt
 	./manage.py syncdb
